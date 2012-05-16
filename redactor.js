@@ -86,6 +86,8 @@ var RTOOLBAR = {};
 
 		}, options, this.$el.data());
 
+		this.dropdowns = [];
+
 		// Init
 		this.init();
 	}
@@ -381,6 +383,10 @@ var RTOOLBAR = {};
 			this.$box.after(this.$el)
 			this.$box.remove();
 			this.$el.val(html).show();
+			this.dropdowns.forEach(function(dropdown, i){
+			    dropdown.remove();
+			    delete(this.dropdowns[i]);
+			}, this);
 		},
 		handler: function()
 		{
@@ -856,7 +862,7 @@ var RTOOLBAR = {};
 					if (key == 'backcolor' || key == 'fontcolor') dropdown = this.buildColorPicker(dropdown, key);
 					else dropdown = this.buildDropdown(dropdown, s.dropdown);
 
-					$(document.body).append(dropdown);
+					this.dropdowns.push(dropdown.appendTo($(document.body)));
 
 					// observing dropdown
 					this.hdlHideDropDown = $.proxy(function(e) { this.hideDropDown(e, dropdown, key) }, this);
