@@ -367,7 +367,7 @@ var RTOOLBAR = {};
 		},
 		getCode: function()
 		{
-			var html = this.$editor.html();
+			var html = this.$editor?this.$editor.html():this.$el.val();
 			html = this.reformater(html);
 
 			return html;
