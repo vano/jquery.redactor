@@ -24,7 +24,7 @@ var RTOOLBAR = {};
 			var data = $this.data('redactor');
 			if (!data) $this.data('redactor', (data = new Redactor(this, option)));
 		});
-	}
+	};
 
 
 	// Initialization
@@ -90,7 +90,7 @@ var RTOOLBAR = {};
 
 		// Init
 		this.init();
-	}
+	};
 
 	// Functionality
 	Redactor.prototype = {
@@ -102,8 +102,9 @@ var RTOOLBAR = {};
 			var item = array[0];
 			array.splice(0, 1);
 
-			if (typeof(item) == 'function') var callback = item;
-			else var callback = $.proxy(function() { this._loadFile(item, array); }, this);
+			var callback = (typeof(item) == 'function')?
+		                    item:
+		                    $.proxy(function() { this._loadFile(item, array); }, this);
 
 			this.dynamicallyLoad(file, callback);
 		},
@@ -380,7 +381,7 @@ var RTOOLBAR = {};
 		{
 			var html = this.getCode();
 
-			this.$box.after(this.$el)
+			this.$box.after(this.$el);
 			this.$box.remove();
 			this.$el.val(html).show();
 			this.dropdowns.forEach(function(dropdown, i){
@@ -420,7 +421,7 @@ var RTOOLBAR = {};
 		},
 		observeScroll: function()
 		{
-			var scrolltop = $(document).scrollTop()
+			var scrolltop = $(document).scrollTop();
 			var boxtop = this.$box.offset().top;
 
 			if (scrolltop > boxtop)
@@ -513,7 +514,7 @@ var RTOOLBAR = {};
 			{
 				if (e.preventDefault) e.preventDefault();
 
-				var node1 = $('<span><br /></span>')
+				var node1 = $('<span><br /></span>');
 				this.insertNodeAtCaret(node1.get(0));
 				this.setFocusNode(node1.get(0));
 
@@ -723,8 +724,8 @@ var RTOOLBAR = {};
 			// lowercase
 			if ($.browser.msie)
 			{
-				html = html.replace(/< *(\/ *)?(\w+)/g,function(w){return w.toLowerCase()});
-				html = html.replace(/style="(.*?)"/g,function(w){return w.toLowerCase()});
+				html = html.replace(/< *(\/ *)?(\w+)/g,function(w){return w.toLowerCase();});
+				html = html.replace(/style="(.*?)"/g,function(w){return w.toLowerCase();});
 				html = html.replace(/ jQuery(.*?)=\"(.*?)\"/gi, '');
 			}
 
@@ -754,7 +755,7 @@ var RTOOLBAR = {};
 
 			// empty tags
 			var btags = ["<pre></pre>","<blockquote></blockquote>","<em></em>","<b></b>","<ul></ul>","<ol></ol>","<li></li>","<table></table>","<tr></tr>","<span><span>", "<span>&nbsp;<span>", "<p> </p>", "<p></p>", "<p>&nbsp;</p>",  "<p><br></p>", "<div></div>"];
-			for (i = 0; i < btags.length; ++i)
+			for (var i = 0; i < btags.length; ++i)
 			{
 				var bbb = btags[i];
 				html = html.replace(new RegExp(bbb,'gi'), "");
@@ -763,7 +764,7 @@ var RTOOLBAR = {};
 			// add formatting before
 			var lb = '\r\n';
 			var btags = ["<form","<fieldset","<legend","<object","<embed","<select","<option","<input","<textarea","<pre","<blockquote","<ul","<ol","<li","<dl","<dt","<dd","<\!--","<table", "<thead","<tbody","<caption","</caption>","<th","<tr","<td","<figure"];
-			for (i = 0; i < btags.length; ++i)
+			for (var i = 0; i < btags.length; ++i)
 			{
 				var bbb = btags[i];
 				html = html.replace(new RegExp(bbb,'gi'),lb+bbb);
@@ -771,7 +772,7 @@ var RTOOLBAR = {};
 
 			// add formatting after
 			var etags = ['</p>', '</div>', '</ul>', '</ol>', '</h1>', '</h2>', '</h3>', '</h4>', '</h5>', '</h6>', '<br>', '<br />', '</dl>', '</dt>', '</dd>', '</form>', '</blockquote>', '</pre>', '</legend>', '</fieldset>', '</object>', '</embed>', '</textarea>', '</select>', '</option>', '</table>', '</thead>', '</tbody>', '</tr>', '</td>', '</th>', '</figure>'];
-			for (i = 0; i < etags.length; ++i)
+			for (var i = 0; i < etags.length; ++i)
 			{
 				var bbb = etags[i];
 				html = html.replace(new RegExp(bbb,'gi'),bbb+lb);
@@ -812,11 +813,12 @@ var RTOOLBAR = {};
 
 				if (this.$editor.html() == '')
 				{
-					if (!$.browser.mozilla) var html = this.opts.allEmptyHtml;
-					else var html = this.opts.mozillaEmptyHtml;
-
-					this.setCode(html);
-				}
+					this.setCode(
+				        (!$.browser.mozilla)?
+			                this.opts.allEmptyHtml:
+		                    this.opts.mozillaEmptyHtml
+			        );
+				};
 
 				this.focus();
 
@@ -865,8 +867,8 @@ var RTOOLBAR = {};
 					this.dropdowns.push(dropdown.appendTo($(document.body)));
 
 					// observing dropdown
-					this.hdlHideDropDown = $.proxy(function(e) { this.hideDropDown(e, dropdown, key) }, this);
-					this.hdlShowDropDown = $.proxy(function(e) { this.showDropDown(e, dropdown, key) }, this);
+					this.hdlHideDropDown = $.proxy(function(e) { this.hideDropDown(e, dropdown, key); }, this);
+					this.hdlShowDropDown = $.proxy(function(e) { this.showDropDown(e, dropdown, key); }, this);
 
 					a.click(this.hdlShowDropDown);
 				}
@@ -895,10 +897,11 @@ var RTOOLBAR = {};
 				{
 					if (typeof(d.style) == 'undefined') d.style = '';
 
-					if (d.name == 'separator') var drop_a = $('<a class="redactor_separator_drop">');
+					var drop_a;
+					if (d.name == 'separator') drop_a = $('<a class="redactor_separator_drop">');
 		   			else
 		   			{
-		   				var drop_a = $('<a href="javascript:void(null);" style="' + d.style + '">' + d.title + '</a>');
+		   				drop_a = $('<a href="javascript:void(null);" style="' + d.style + '">' + d.title + '</a>');
 
 	   					if (typeof(d.func) == 'undefined') $(drop_a).click($.proxy(function() { this.execCommand(d.exec, x); }, this));
 						else $(drop_a).click($.proxy(function(e) { this[d.func](e); }, this));
@@ -914,12 +917,9 @@ var RTOOLBAR = {};
 		},
 		buildColorPicker: function(dropdown, key)
 		{
-			if (key == 'backcolor')
-			{
-				if ($.browser.msie) var mode = 'BackColor';
-				else var mode = 'hilitecolor';
-			}
-			else var mode = 'ForeColor';
+		    var mode = (key == 'backcolor')?
+		                ($.browser.msie) && 'BackColor' || 'hilitecolor':
+		                'ForeColor';
 
 			$(dropdown).width(210);
 
@@ -1013,7 +1013,7 @@ var RTOOLBAR = {};
 			var range = this.doc.createRange();
 
 			var selection = this.getSelection();
-		    var toStart = toStart ? 0 : 1;
+		    toStart = toStart ? 0 : 1;
 
 			if (selection != null)
 			{
@@ -1277,8 +1277,8 @@ var RTOOLBAR = {};
 				{
 					clicker = false;
 
-					var mouse_x = Math.round(e.pageX - $(this).eq(0).offset().left) - start_x;
-					var mouse_y = Math.round(e.pageY - $(this).eq(0).offset().top) - start_y;
+					var mouse_x = Math.round(e.pageX - $(this).eq(0).offset().left); // - start_x ;
+					var mouse_y = Math.round(e.pageY - $(this).eq(0).offset().top); // - start_y;
 
 					var div_h = $(resize).height();
 
@@ -1316,10 +1316,10 @@ var RTOOLBAR = {};
 	        var tableid = Math.floor(Math.random() * 99999);
 	        var table = $('<table id="table' + tableid + '"><tbody></tbody></table>');
 
-	        for (i = 0; i < rows; i++)
+	        for (var i = 0; i < rows; i++)
 	        {
-	        	var row = $('<tr></tr>')
-	        	for (z = 0; z < columns; z++)
+	        	var row = $('<tr></tr>');
+	        	for (var z = 0; z < columns; z++)
 	        	{
 	        		var column = $('<td>&nbsp;</td>');
 	        		$(row).append(column);
@@ -1629,39 +1629,40 @@ var RTOOLBAR = {};
 
 				if ($.browser.msie)
 				{
-					var parent = this.getParentNode();
+					var parent = this.getParentNode(),
+					    url,
+					    text;
+
 					if (parent.nodeName == 'A')
 					{
 						this.insert_link_node = $(parent);
-						var text = this.insert_link_node.text();
-						var url = this.insert_link_node.attr('href');
+						text = this.insert_link_node.text();
+						url = this.insert_link_node.attr('href');
 					}
 					else
 					{
-						if (this.oldIE()) var text = sel.text;
-						else var text = sel.toString();
+						text = this.oldIE()?sel.text:sel.toString();
 
-						var url = '';
+						url = '';
 
 						this.spanid = Math.floor(Math.random() * 99999);
 
-						var html = '<span id="span' + this.spanid + '">' + text + '</span>';
-						if (text != '') html = '<span id="span' + this.spanid + '">' + text + '</span>';
-						this.execCommand('inserthtml', html);
+						this.execCommand('inserthtml', '<span id="span' + this.spanid + '">' + text + '</span>');
 					}
 				}
 				else
 				{
 					if (sel && sel.anchorNode.parentNode.tagName == 'A')
 					{
-						var url = sel.anchorNode.parentNode.href;
-						var text = sel.anchorNode.parentNode.text;
-						if (sel.toString() == '') this.insert_link_node = sel.anchorNode.parentNode
+						url = sel.anchorNode.parentNode.href;
+						text = sel.anchorNode.parentNode.text;
+						if (sel.toString() == '')
+						    this.insert_link_node = sel.anchorNode.parentNode;
 					}
 					else
 					{
-					 	var text = sel.toString();
-						var url = '';
+					 	text = sel.toString();
+						url = '';
 					}
 				}
 
@@ -1995,9 +1996,9 @@ var RTOOLBAR = {};
 	    {
 	        var i = $('#' + this.id);
 
-	        if (i.contentDocument) var d = i.contentDocument;
-	        else if (i.contentWindow) var d = i.contentWindow.document;
-	        else var d = window.frames[this.id].document;
+	        var d = i.contentDocument && i.contentDocument||
+	                i.contentWindow && i.contentWindow.document||
+	                window.frames[this.id].document;
 
 	        if (d.location.href == "about:blank") return true;
 
@@ -2029,54 +2030,54 @@ var RTOOLBAR = {};
 			return parseInt(str.replace('px',''));
 		}
 
-	}
+	};
 
 
 	// API
 	$.fn.getDoc = function()
 	{
 		return $(this.data('redactor').doc);
-	}
+	};
 
 	$.fn.getFrame = function()
 	{
 		return this.data('redactor').$frame;
-	}
+	};
 
 	$.fn.getEditor = function()
 	{
 		return this.data('redactor').$editor;
-	}
+	};
 
 	$.fn.getCode = function()
 	{
 		return this.data('redactor').getCode();
-	}
+	};
 
 	$.fn.setCode = function(html)
 	{
 		this.data('redactor').setCode(html);
-	}
+	};
 
 	$.fn.insertHtml = function(html)
 	{
 		this.data('redactor').insertHtml(html);
-	}
+	};
 
 	$.fn.destroyEditor = function()
 	{
 		this.data('redactor').destroy();
-	}
+	};
 
 	$.fn.setFocus = function()
 	{
 		this.data('redactor').focus();
-	}
+	};
 
 	$.fn.execCommand = function(cmd, param)
 	{
 		this.data('redactor').execCommand(cmd, param);
-	}
+	};
 
 })(jQuery);
 
