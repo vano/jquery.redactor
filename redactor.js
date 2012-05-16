@@ -437,25 +437,14 @@ var RTOOLBAR = {};
 		},
 		observeAutoResize: function()
 		{
-			this.setAutoSize();
+		    this.$editor.css({'min-height':this.$el.height()+'px'});
+		    this.$frame.css({'overflow-x':'auto', 'overflow-y':'hidden'});
+		    this.$frame.load($.proxy(this.setAutoSize, this));
 			$(this.doc).keyup($.proxy(this.setAutoSize, this));
-
 		},
 		setAutoSize: function()
 		{
-			var oheight = parseInt(this.height.replace('px', ''));
-			var height = this.getEditorHeight();
-
-			if (height <= oheight) height = oheight+40;
-			else height += 40;
-
-			this.$frame.height(height);
-			this.$el.height(height);
-		},
-		getEditorHeight: function()
-		{
-			return this.$editor.height() + this.normalize(this.$editor.css('margin-top')) + this.normalize(this.$editor.css('margin-bottom'))
-			 + this.normalize(this.$editor.css('padding-top')) + this.normalize(this.$editor.css('padding-bottom'));
+			this.$frame.height(this.$editor.outerHeight(true));
 		},
 
 		// EXECCOMMAND
